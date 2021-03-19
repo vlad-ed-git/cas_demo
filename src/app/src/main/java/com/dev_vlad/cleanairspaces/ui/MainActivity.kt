@@ -48,12 +48,22 @@ class MainActivity : AppCompatActivity() {
                 R.id.mapFragment -> {
                     binding.apply {
                         toolbar.isVisible = true
+                        toolbarTitle.isVisible = false
                         toolbarLogo.isVisible = true
                         Glide.with(this@MainActivity)
                             .load(R.drawable.clean_air_spaces_logo_name)
                             .into(toolbarLogo)
                     }
                 }
+
+               R.id.aboutAppFragment -> {
+                   binding.apply {
+                       toolbar.isVisible = true
+                       toolbarLogo.isVisible = false
+                       toolbarTitle.isVisible = true
+                       toolbarTitle.setText(R.string.map_menu_about_app_txt)
+                   }
+               }
 
                 else -> {
                     binding.apply {
