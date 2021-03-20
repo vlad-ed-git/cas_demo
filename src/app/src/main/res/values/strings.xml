@@ -10,4 +10,8 @@
     <string name="map_menu_help_desc_txt">This is a demo app by Vlad</string>
     <string name="got_it">Got it!</string>
     <string name="dismiss">Dismiss</string>
+    <string name="locations_txt">Locations</string>
+    <string name="smart_qr_txt">SMART QR</string>
+    <string name="map_view_txt">Map View</string>
+    <string name="add_txt">Add</string>
 </resources>
