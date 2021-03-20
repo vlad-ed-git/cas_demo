@@ -1,0 +1,35 @@
+<resources>
+    <string name="app_name">CleanAir Spaces</string>
+    <string name="tool_bar_logo_desc">logo</string>
+    <string name="map_menu_help_txt">Help</string>
+    <string name="map_menu_about_app_txt">About App</string>
+    <string name="app_logo_image_desc">app logo</string>
+    <string name="about_app_txt">Demo by Vladimir Peter</string>
+    <string name="map_menu_help_desc_txt">This is a demo app by Vlad</string>
+    <string name="got_it">Got it!</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="locations_txt">Locations</string>
+    <string name="smart_qr_txt">SMART QR</string>
+    <string name="map_view_txt">Map View</string>
+    <string name="add_txt">Add</string>
+    <string name="location_logo_image_desc">Location logo image</string>
+    <string name="indoor_txt">indoor</string>
+    <string name="outdoor_txt">outdoor</string>
+    <string name="air_status_indicator_desc">air status indicator</string>
+    <string name="good_air_status_txt">Good</string>
+    <string name="moderate_air_status_txt">Moderate</string>
+
+    <!-- demo location -->
+    <string name="demo_location_name">Saint Gobain</string>
+    <string name="demo_update_time">Updated 19 March 10:36</string>
+    <string name="demo_location_area">Outdoor: Shanghai</string>
+    <string name="demo_indoor_pm">PM2.5</string>
+    <string name="demo_indoor_pts">6</string>
+    <string name="demo_outdoor_pm">PM2.5</string>
+    <string name="demo_outdoor_pts">18</string>
+    <string name="permission_to_show_your_location_denied">Permissions to get your location were denied.</string>
+    <string name="location_permission_rationale">Permission needed to show your location on the map</string>
+    <string name="click_to_view_info_txt">click to view info</string>
+    <string name="danger_txt">Not working</string>
+    <string name="updated_on_prefix">Updated On</string>
+</resources>
