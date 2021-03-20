@@ -1,15 +1,24 @@
 package com.dev_vlad.cleanairspaces.ui.home
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.util.Log
 import android.view.*
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.onNavDestinationSelected
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.amap.api.maps2d.AMap
 import com.amap.api.maps2d.MapView
+import com.amap.api.maps2d.model.*
 import com.dev_vlad.cleanairspaces.R
 import com.dev_vlad.cleanairspaces.databinding.FragmentMapBinding
 import com.dev_vlad.cleanairspaces.ui.adapters.home.MapActionsAdapter
@@ -31,9 +40,29 @@ class MapFragment : Fragment(), MapActionsAdapter.ClickListener {
     private val viewModel: MapViewModel by viewModels()
     private var _binding: FragmentMapBinding? = null
     private val binding get() = _binding!!
+
+
+    private val CIRCLE_RADIUS = 500.toDouble()
+    private val STROKE_WIDTH = 15f
+
+    private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
+
+
     private val mapActionsAdapter by lazy {
         MapActionsAdapter(this)
     }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        requestPermissionLauncher = registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted: Boolean ->
+            if (isGranted) {
+                showUserLocation()
+            }
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -54,13 +83,74 @@ class MapFragment : Fragment(), MapActionsAdapter.ClickListener {
             )
             mapActionsAdapter.setMapActionsList(viewModel.mapActions)
             mapActionsRv.adapter = mapActionsAdapter
+        }
 
-            val mapView = map as MapView
-            mapView.onCreate(savedInstanceState)
-            val aMap = mapView.map
+        initializeMap(savedInstanceState)
+
+    }
+
+    private var mapView: MapView? = null
+    private var aMap: AMap? = null
+    private fun initializeMap(savedInstanceState: Bundle?) {
+        binding.apply {
+            mapView = map as MapView
+            mapView?.let {
+                it.onCreate(savedInstanceState)
+                aMap = it.map
+                aMap?.apply {
+                    setMapLanguage(AMap.ENGLISH)
+                    uiSettings.isZoomControlsEnabled = false
+                    setupMarkers()
+                }
+                requestPermissionsToShowLocation()
+            }
         }
 
     }
+
+    private fun requestPermissionsToShowLocation() {
+        when {
+            ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED -> {
+                showUserLocation()
+            }
+            shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION) -> {
+                showDialog(msgRes = R.string.location_permission_rationale) { this@MapFragment.requestPermission() }
+            }
+            else -> {
+                requestPermission()
+            }
+        }
+    }
+
+    private fun requestPermission() {
+        requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+    }
+
+    /**** TODO fix - customMyLocationIcon ***/
+    private fun showUserLocation() {
+        val myLocationStyle: MyLocationStyle = MyLocationStyle()
+        myLocationStyle.apply {
+            myLocationIcon(
+                BitmapDescriptorFactory.fromBitmap(
+                    BitmapFactory
+                        .decodeResource(resources, R.drawable.my_location_icon)
+                )
+            )
+            interval(2000)
+            myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATE)
+        }
+        aMap?.apply {
+            setMyLocationStyle(myLocationStyle)
+            uiSettings?.isMyLocationButtonEnabled = true
+            isMyLocationEnabled = true
+        }
+    }
+
+
+    /***************** DIALOGS ****************/
 
     override fun onClickAction(actionChoice: MapActionChoices) {
         showSnackBar(
@@ -68,23 +158,15 @@ class MapFragment : Fragment(), MapActionsAdapter.ClickListener {
         )
     }
 
-    private fun showSnackBar(msgRes: Int, isError: Boolean = false){
-        dismissPopUps()
-        binding.apply {
-            snackbar = viewsContainer.showSnackBar(
-                msgResId = msgRes,
-                isErrorMsg = isError
-            )
-        }
-    }
 
-    private fun showHelpDialog() {
+    private fun showDialog(msgRes: Int, positiveAction: () -> Unit) {
         dismissPopUps()
         popUp = MaterialAlertDialogBuilder(requireContext())
-            .setTitle(R.string.map_menu_help_desc_txt)
+            .setTitle(msgRes)
             .setPositiveButton(
                 R.string.got_it
             ) { dialog, _ ->
+                positiveAction.invoke()
                 dialog.dismiss()
             }
             .setNeutralButton(
@@ -96,6 +178,23 @@ class MapFragment : Fragment(), MapActionsAdapter.ClickListener {
         popUp?.show()
     }
 
+    private fun showSnackBar(
+        msgRes: Int,
+        isError: Boolean = false,
+        actionRes: Int? = null,
+        msg: String? = null
+    ) {
+        dismissPopUps()
+        binding.apply {
+            snackbar = viewsContainer.showSnackBar(
+                msgResId = msgRes,
+                isErrorMsg = isError,
+                actionMessage = actionRes
+            )
+        }
+    }
+
+
     /************* MENU **************/
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.map_view_menu, menu)
@@ -105,7 +204,7 @@ class MapFragment : Fragment(), MapActionsAdapter.ClickListener {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_help -> {
-                showHelpDialog()
+                showDialog(msgRes = R.string.map_menu_help_desc_txt, positiveAction = {})
                 true
             }
             else -> item.onNavDestinationSelected(findNavController()) || super.onOptionsItemSelected(
@@ -126,12 +225,61 @@ class MapFragment : Fragment(), MapActionsAdapter.ClickListener {
         }
     }
 
+    /************* forwarding life cycle methods *********/
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        mapView?.onSaveInstanceState(outState)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mapView?.onResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mapView?.onPause()
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
+        mapView?.onDestroy()
         dismissPopUps()
         _binding = null
     }
 
 
+    /**************** MARKERS **************/
+    /**** TODO fix - customMarkerIcon ***/
+    private fun setupMarkers() {
+        for (location in viewModel.locations) {
+            val markerOptions = MarkerOptions()
+            markerOptions.apply {
+                position(location.location)
+                title(location.title)
+                snippet(location.subtitle)
+                draggable(false)
+                icon(
+                    BitmapDescriptorFactory.fromBitmap(
+                        BitmapFactory
+                            .decodeResource(resources, location.status.drawableRes)
+                    )
+                )
+            }
+            aMap?.addMarker(markerOptions)
+            aMap?.addCircle(getCircle(type = location.status, pos = location.location))
+        }
+        aMap?.setOnMarkerClickListener {
+            Log.d(TAG, it.title)
+            false
+        }
 
+    }
+
+    private fun getCircle(pos: LatLng, type: LocationStatus): CircleOptions? {
+        return CircleOptions().center(pos).radius(CIRCLE_RADIUS)
+            .fillColor(ContextCompat.getColor(requireContext(), type.colorRes))
+            .strokeColor(ContextCompat.getColor(requireContext(), R.color.whitish))
+            .strokeWidth(STROKE_WIDTH)
+    }
 }
