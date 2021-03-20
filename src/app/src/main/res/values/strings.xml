@@ -29,4 +29,7 @@
     <string name="demo_outdoor_pts">18</string>
     <string name="permission_to_show_your_location_denied">Permissions to get your location were denied.</string>
     <string name="location_permission_rationale">Permission needed to show your location on the map</string>
+    <string name="click_to_view_info_txt">click to view info</string>
+    <string name="danger_txt">Not working</string>
+    <string name="updated_on_prefix">Updated On</string>
 </resources>

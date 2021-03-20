@@ -21,7 +21,10 @@ import com.amap.api.maps2d.MapView
 import com.amap.api.maps2d.model.*
 import com.dev_vlad.cleanairspaces.R
 import com.dev_vlad.cleanairspaces.databinding.FragmentMapBinding
+import com.dev_vlad.cleanairspaces.models.LocationStatus
 import com.dev_vlad.cleanairspaces.ui.adapters.home.MapActionsAdapter
+import com.dev_vlad.cleanairspaces.ui.adapters.home.MapsMarkersInfoWindowAdapter
+import com.dev_vlad.cleanairspaces.ui.dialogs.LocationInfoDialog
 import com.dev_vlad.cleanairspaces.utils.showSnackBar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
@@ -36,6 +39,7 @@ class MapFragment : Fragment(), MapActionsAdapter.ClickListener {
     }
 
     private var popUp: AlertDialog? = null
+    private var locationInfoDialog : LocationInfoDialog? = null
     private var snackbar: Snackbar? = null
     private val viewModel: MapViewModel by viewModels()
     private var _binding: FragmentMapBinding? = null
@@ -91,22 +95,31 @@ class MapFragment : Fragment(), MapActionsAdapter.ClickListener {
 
     private var mapView: MapView? = null
     private var aMap: AMap? = null
+    private var mapsMarkersInfoWindowAdapter : MapsMarkersInfoWindowAdapter? = null
     private fun initializeMap(savedInstanceState: Bundle?) {
         binding.apply {
             mapView = map as MapView
-            mapView?.let {
-                it.onCreate(savedInstanceState)
-                aMap = it.map
+            mapView?.let { mMapView ->
+                mMapView.onCreate(savedInstanceState)
+                aMap = mMapView.map
                 aMap?.apply {
                     setMapLanguage(AMap.ENGLISH)
                     uiSettings.isZoomControlsEnabled = false
                     setupMarkers()
+                    mapsMarkersInfoWindowAdapter = MapsMarkersInfoWindowAdapter(requireContext())
+                    setInfoWindowAdapter(mapsMarkersInfoWindowAdapter)
+                    setOnInfoWindowClickListener(AMap.OnInfoWindowClickListener() {
+                        clickedMarker -> clickedMarker?.let {
+                            displayLocationInfo(it.title)
+                    }
+                    })
+                    requestPermissionsToShowLocation()
                 }
-                requestPermissionsToShowLocation()
             }
         }
 
     }
+
 
     private fun requestPermissionsToShowLocation() {
         when {
@@ -129,7 +142,6 @@ class MapFragment : Fragment(), MapActionsAdapter.ClickListener {
         requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
     }
 
-    /**** TODO fix - customMyLocationIcon ***/
     private fun showUserLocation() {
         val myLocationStyle: MyLocationStyle = MyLocationStyle()
         myLocationStyle.apply {
@@ -151,6 +163,15 @@ class MapFragment : Fragment(), MapActionsAdapter.ClickListener {
 
 
     /***************** DIALOGS ****************/
+
+    private fun displayLocationInfo(title: String) {
+        val locationInfo =  viewModel.getLocationInfo(locationName = title)
+        locationInfo?.let {
+            dismissPopUps()
+            locationInfoDialog = LocationInfoDialog(it)
+            locationInfoDialog?.show(parentFragmentManager, "com.dev_vlad.cleanairspaces.ui.dialogs")
+        }
+    }
 
     override fun onClickAction(actionChoice: MapActionChoices) {
         showSnackBar(
@@ -215,17 +236,58 @@ class MapFragment : Fragment(), MapActionsAdapter.ClickListener {
 
     /****** other life cycle methods ********/
     private fun dismissPopUps() {
+        locationInfoDialog?.let{
+            if (it.isVisible) it.dismiss()
+        }
         popUp?.let {
             if (it.isShowing) it.dismiss()
-            popUp = null
         }
         snackbar?.let {
             if (it.isShown) it.dismiss()
-            snackbar = null
         }
+        locationInfoDialog = null
+        popUp = null
+        snackbar = null
     }
 
-    /************* forwarding life cycle methods *********/
+
+    /**************** MARKERS **************/
+    private fun setupMarkers() {
+        val locations = viewModel.getLocations()
+        for (location in locations) {
+            val markerOptions = MarkerOptions()
+            markerOptions.apply {
+                position(location.location)
+                title(location.location_name)
+                snippet(location.location_area)
+                draggable(false)
+                icon(
+                    BitmapDescriptorFactory.fromBitmap(
+                        BitmapFactory
+                            .decodeResource(resources, location.indoor_status.drawableRes)
+                    )
+                )
+            }
+            aMap?.addMarker(markerOptions)
+            aMap?.addCircle(getCircle(type = location.outdoor_status, pos = location.location))
+        }
+        aMap?.setOnMarkerClickListener {
+            Log.d(TAG, it.title)
+            false
+        }
+
+    }
+
+    private fun getCircle(pos: LatLng, type: LocationStatus): CircleOptions? {
+        return CircleOptions().center(pos).radius(CIRCLE_RADIUS)
+            .fillColor(ContextCompat.getColor(requireContext(), R.color.white))
+            .strokeColor(ContextCompat.getColor(requireContext(), type.colorRes))
+            .strokeWidth(STROKE_WIDTH)
+    }
+
+
+
+    /************* forwarding life cycle methods & clearing *********/
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         mapView?.onSaveInstanceState(outState)
@@ -244,42 +306,9 @@ class MapFragment : Fragment(), MapActionsAdapter.ClickListener {
     override fun onDestroyView() {
         super.onDestroyView()
         mapView?.onDestroy()
+        mapsMarkersInfoWindowAdapter = null
         dismissPopUps()
         _binding = null
     }
 
-
-    /**************** MARKERS **************/
-    /**** TODO fix - customMarkerIcon ***/
-    private fun setupMarkers() {
-        for (location in viewModel.locations) {
-            val markerOptions = MarkerOptions()
-            markerOptions.apply {
-                position(location.location)
-                title(location.title)
-                snippet(location.subtitle)
-                draggable(false)
-                icon(
-                    BitmapDescriptorFactory.fromBitmap(
-                        BitmapFactory
-                            .decodeResource(resources, location.status.drawableRes)
-                    )
-                )
-            }
-            aMap?.addMarker(markerOptions)
-            aMap?.addCircle(getCircle(type = location.status, pos = location.location))
-        }
-        aMap?.setOnMarkerClickListener {
-            Log.d(TAG, it.title)
-            false
-        }
-
-    }
-
-    private fun getCircle(pos: LatLng, type: LocationStatus): CircleOptions? {
-        return CircleOptions().center(pos).radius(CIRCLE_RADIUS)
-            .fillColor(ContextCompat.getColor(requireContext(), type.colorRes))
-            .strokeColor(ContextCompat.getColor(requireContext(), R.color.whitish))
-            .strokeWidth(STROKE_WIDTH)
-    }
 }
