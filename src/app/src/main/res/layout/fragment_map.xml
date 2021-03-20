@@ -6,9 +6,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.home.MapFragment">
 
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_gravity="top|start"
         android:padding="@dimen/std_space"
         android:id="@+id/views_container">
@@ -34,9 +39,13 @@
         <include layout="@layout/map_place_details_popup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/md_space"
+            android:layout_marginStart="@dimen/std_space"
+            android:layout_marginEnd="@dimen/std_space"
+            android:layout_marginTop="@dimen/md_space"
+            android:layout_marginBottom="@dimen/md_space"
             android:layout_below="@+id/locations_tv"/>
 
     </RelativeLayout>
+    </ScrollView>
 
 </FrameLayout>
