@@ -9,6 +9,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.onNavDestinationSelected
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.amap.api.maps2d.MapView
 import com.dev_vlad.cleanairspaces.R
 import com.dev_vlad.cleanairspaces.databinding.FragmentMapBinding
 import com.dev_vlad.cleanairspaces.ui.adapters.home.MapActionsAdapter
@@ -16,6 +17,7 @@ import com.dev_vlad.cleanairspaces.utils.showSnackBar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+
 
 @AndroidEntryPoint
 class MapFragment : Fragment(), MapActionsAdapter.ClickListener {
@@ -45,10 +47,19 @@ class MapFragment : Fragment(), MapActionsAdapter.ClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.apply {
-            mapActionsRv.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
+            mapActionsRv.layoutManager = LinearLayoutManager(
+                requireContext(),
+                RecyclerView.HORIZONTAL,
+                false
+            )
             mapActionsAdapter.setMapActionsList(viewModel.mapActions)
             mapActionsRv.adapter = mapActionsAdapter
+
+            val mapView = map as MapView
+            mapView.onCreate(savedInstanceState)
+            val aMap = mapView.map
         }
+
     }
 
     override fun onClickAction(actionChoice: MapActionChoices) {
@@ -57,7 +68,7 @@ class MapFragment : Fragment(), MapActionsAdapter.ClickListener {
         )
     }
 
-    private fun showSnackBar(msgRes : Int, isError : Boolean = false){
+    private fun showSnackBar(msgRes: Int, isError: Boolean = false){
         dismissPopUps()
         binding.apply {
             snackbar = viewsContainer.showSnackBar(

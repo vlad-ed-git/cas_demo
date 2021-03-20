@@ -6,6 +6,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.home.MapFragment">
 
+    <com.amap.api.maps2d.MapView
+        android:id="@+id/map"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </com.amap.api.maps2d.MapView>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -27,7 +32,12 @@
             android:layout_alignParentTop="true"
             android:layout_alignBottom="@id/map_actions_rv"
             android:gravity="start|center_vertical"
-            android:layout_alignParentStart="true"/>
+            android:layout_alignParentStart="true"
+            android:background="@drawable/transparent_whitish"
+            android:paddingTop="0dp"
+            android:paddingBottom="0dp"
+            android:paddingStart="@dimen/std_space"
+            android:paddingEnd="@dimen/std_space"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/map_actions_rv"
@@ -35,15 +45,6 @@
             android:layout_width="match_parent"
             android:layout_alignParentTop="true"
             android:layout_toEndOf="@id/locations_tv"/>
-
-        <include layout="@layout/map_place_details_popup"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/std_space"
-            android:layout_marginEnd="@dimen/std_space"
-            android:layout_marginTop="@dimen/md_space"
-            android:layout_marginBottom="@dimen/md_space"
-            android:layout_below="@+id/locations_tv"/>
 
     </RelativeLayout>
     </ScrollView>
