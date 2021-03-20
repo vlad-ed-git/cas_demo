@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardBackgroundColor="@color/green"
+    app:cardCornerRadius="@dimen/md_space"
+    app:cardElevation="@dimen/md_space"
+    android:clipToPadding="false">
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/md_space">
+
+    <TextView
+        android:id="@+id/location_name_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Saint Gobain"
+        android:textColor="@color/white"
+        style="@style/Theme.CleanAirSpaces.Title1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <ImageView
+        android:id="@+id/location_logo_iv"
+        android:layout_width="0dp"
+        app:layout_constraintWidth_percent=".35"
+        android:layout_height="@dimen/location_logo_size"
+        android:scaleType="fitCenter"
+        android:src="@drawable/saint_gobain_logo"
+        android:background="@drawable/round_whitish_img_bg"
+        android:paddingStart="@dimen/std_space"
+        android:paddingEnd="@dimen/std_space"
+        android:layout_marginTop="@dimen/std_space"
+        android:contentDescription="@string/location_logo_image_desc"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/location_name_tv"/>
+
+
+    <TextView
+        android:id="@+id/updated_tv"
+        android:layout_width="0dp"
+        app:layout_constraintEnd_toEndOf="@id/location_logo_iv"
+        android:layout_height="wrap_content"
+        android:text="Updated 19 March 10:36"
+        android:textColor="@color/white"
+        android:layout_marginTop="@dimen/std_space"
+        style="@style/Theme.CleanAirSpaces.Subtitle1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/location_logo_iv"/>
+
+    <TextView
+        android:id="@+id/location_area_tv"
+        android:layout_width="0dp"
+        app:layout_constraintEnd_toEndOf="@id/location_logo_iv"
+        android:layout_height="wrap_content"
+        android:text="Outdoor: Shanghai"
+        android:layout_marginTop="@dimen/std_space"
+        android:textColor="@color/white"
+        style="@style/Theme.CleanAirSpaces.Subtitle1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/updated_tv"/>
+
+    <TextView
+        android:id="@+id/indoor_tv"
+        android:layout_width="0dp"
+        app:layout_constraintWidth_percent=".35"
+        android:layout_height="wrap_content"
+        android:text="@string/indoor_txt"
+        android:textColor="@color/white"
+        style="@style/Theme.CleanAirSpaces.Body1"
+        android:textStyle="bold"
+        android:gravity="bottom|end"
+        android:paddingTop="@dimen/md_space"
+        app:layout_constraintStart_toEndOf="@+id/location_logo_iv"
+        app:layout_constraintTop_toTopOf="@id/location_logo_iv"
+        android:layout_marginTop="@dimen/half_location_logo_size"/>
+
+    <TextView
+        android:id="@+id/indoor_pm_tv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="PM2.5"
+        android:textColor="@color/white"
+        style="@style/Theme.CleanAirSpaces.Body1"
+        android:textStyle="bold"
+        android:gravity="bottom|end"
+        app:layout_constraintStart_toEndOf="@+id/location_logo_iv"
+        app:layout_constraintEnd_toEndOf="@id/indoor_tv"
+        app:layout_constraintTop_toBottomOf="@id/indoor_tv"
+        android:layout_marginTop="@dimen/std_space"/>
+
+    <TextView
+        android:id="@+id/indoor_points_tv"
+        android:layout_width="0dp"
+        app:layout_constraintEnd_toEndOf="@id/indoor_tv"
+        android:layout_height="wrap_content"
+        android:text="6"
+        android:textSize="@dimen/lg_txt"
+        android:textColor="@color/white"
+        style="@style/Theme.CleanAirSpaces.Body1"
+        android:textStyle="bold"
+        android:gravity="bottom|end"
+        app:layout_constraintStart_toEndOf="@+id/location_logo_iv"
+        app:layout_constraintTop_toBottomOf="@id/indoor_pm_tv"
+        android:layout_marginTop="@dimen/std_space"/>
+
+    <ImageView
+        android:id="@+id/indoor_status_indicator_iv"
+        android:layout_width="0dp"
+        app:layout_constraintEnd_toEndOf="@id/indoor_tv"
+        android:layout_height="@dimen/std_icon"
+        android:src="@drawable/good_status_indicator"
+        android:contentDescription="@string/air_status_indicator_desc"
+        app:layout_constraintStart_toEndOf="@+id/location_logo_iv"
+        app:layout_constraintTop_toBottomOf="@id/indoor_points_tv"
+        android:layout_marginTop="@dimen/std_space"
+        android:layout_marginStart="@dimen/std_space"/>
+
+    <TextView
+        android:id="@+id/indoor_status_indicator_tv"
+        android:layout_width="0dp"
+        app:layout_constraintEnd_toEndOf="@id/indoor_tv"
+        android:layout_height="wrap_content"
+        android:text="@string/good_air_status_txt"
+        android:textColor="@color/white"
+        style="@style/Theme.CleanAirSpaces.Subtitle1"
+        android:gravity="bottom|end"
+        app:layout_constraintStart_toEndOf="@+id/location_logo_iv"
+        app:layout_constraintTop_toBottomOf="@id/indoor_status_indicator_iv"
+        android:layout_marginTop="@dimen/std_space"/>
+
+    <TextView
+        android:id="@+id/outdoor_tv"
+        android:layout_width="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_height="wrap_content"
+        android:text="@string/outdoor_txt"
+        android:textColor="@color/white"
+        style="@style/Theme.CleanAirSpaces.Body1"
+        android:textStyle="bold"
+        android:gravity="bottom|end"
+        android:paddingTop="@dimen/md_space"
+        app:layout_constraintStart_toEndOf="@+id/indoor_tv"
+        app:layout_constraintTop_toTopOf="@id/indoor_tv"/>
+
+    <TextView
+        android:id="@+id/outdoor_pm_tv"
+        android:layout_width="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_height="wrap_content"
+        android:text="PM2.5"
+        android:textColor="@color/white"
+        style="@style/Theme.CleanAirSpaces.Body1"
+        android:textStyle="bold"
+        android:gravity="bottom|end"
+        app:layout_constraintStart_toEndOf="@+id/indoor_tv"
+        app:layout_constraintTop_toBottomOf="@id/outdoor_tv"
+        android:layout_marginTop="@dimen/std_space"/>
+
+    <TextView
+        android:id="@+id/outdoor_points_tv"
+        android:layout_width="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_height="wrap_content"
+        android:text="18"
+        android:textSize="@dimen/lg_txt"
+        android:textColor="@color/white"
+        style="@style/Theme.CleanAirSpaces.Body1"
+        android:textStyle="bold"
+        android:gravity="bottom|end"
+        app:layout_constraintStart_toEndOf="@+id/indoor_tv"
+        app:layout_constraintTop_toBottomOf="@id/outdoor_pm_tv"
+        android:layout_marginTop="@dimen/std_space"/>
+
+    <ImageView
+        android:id="@+id/outdoor_status_indicator_iv"
+        android:layout_width="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="@dimen/std_space"
+        android:layout_height="@dimen/std_icon"
+        android:src="@drawable/moderate_status_indicator"
+        android:contentDescription="@string/air_status_indicator_desc"
+        app:layout_constraintStart_toEndOf="@+id/indoor_tv"
+        app:layout_constraintTop_toBottomOf="@id/outdoor_points_tv"
+        android:layout_marginTop="@dimen/std_space"/>
+
+    <TextView
+        android:id="@+id/outdoor_status_indicator_tv"
+        android:layout_width="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_height="wrap_content"
+        android:text="@string/moderate_air_status_txt"
+        android:textColor="@color/white"
+        style="@style/Theme.CleanAirSpaces.Subtitle1"
+        android:gravity="bottom|end"
+        app:layout_constraintStart_toEndOf="@+id/indoor_tv"
+        app:layout_constraintTop_toBottomOf="@id/outdoor_status_indicator_iv"
+        android:layout_marginTop="@dimen/std_space"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

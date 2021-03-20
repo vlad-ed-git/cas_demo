@@ -20,6 +20,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
+            android:layout_alignBottom="@id/map_actions_rv"
+            android:gravity="start|center_vertical"
             android:layout_alignParentStart="true"/>
 
         <androidx.recyclerview.widget.RecyclerView
@@ -28,6 +30,12 @@
             android:layout_width="match_parent"
             android:layout_alignParentTop="true"
             android:layout_toEndOf="@id/locations_tv"/>
+
+        <include layout="@layout/map_place_details_popup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/md_space"
+            android:layout_below="@+id/locations_tv"/>
 
     </RelativeLayout>
 

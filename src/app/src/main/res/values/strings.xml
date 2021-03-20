@@ -14,4 +14,10 @@
     <string name="smart_qr_txt">SMART QR</string>
     <string name="map_view_txt">Map View</string>
     <string name="add_txt">Add</string>
+    <string name="location_logo_image_desc">Location logo image</string>
+    <string name="indoor_txt">indoor</string>
+    <string name="outdoor_txt">outdoor</string>
+    <string name="air_status_indicator_desc">air status indicator</string>
+    <string name="good_air_status_txt">Good</string>
+    <string name="moderate_air_status_txt">Moderate</string>
 </resources>
