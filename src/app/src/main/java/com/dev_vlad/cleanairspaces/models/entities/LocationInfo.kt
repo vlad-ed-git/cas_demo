@@ -1,4 +1,4 @@
-package com.dev_vlad.cleanairspaces.models
+package com.dev_vlad.cleanairspaces.models.entities
 
 import android.os.Parcelable
 import com.amap.api.maps2d.model.LatLng

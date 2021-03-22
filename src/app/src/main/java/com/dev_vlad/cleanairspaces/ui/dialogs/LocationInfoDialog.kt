@@ -9,8 +9,8 @@ import com.amap.api.maps2d.model.LatLng
 import com.bumptech.glide.Glide
 import com.dev_vlad.cleanairspaces.R
 import com.dev_vlad.cleanairspaces.databinding.MapPlaceDetailsPopupBinding
-import com.dev_vlad.cleanairspaces.models.LocationInfo
-import com.dev_vlad.cleanairspaces.models.LocationStatus
+import com.dev_vlad.cleanairspaces.models.entities.LocationInfo
+import com.dev_vlad.cleanairspaces.models.entities.LocationStatus
 
 class LocationInfoDialog(private val location : LocationInfo) : DialogFragment() {
 
