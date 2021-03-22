@@ -35,7 +35,7 @@ data class LocationInfo(
 
 
 enum class LocationStatus(val colorRes: Int, val drawableRes: Int, val strRes: Int, val statusIndicatorRes: Int){
-    DANGER(colorRes = R.color.orange, drawableRes = R.drawable.danger_location_marker, strRes = R.string.danger_txt, statusIndicatorRes = R.drawable.danger_status_indicator),
-    SAFE(colorRes = R.color.green, drawableRes = R.drawable.safe_location_marker, strRes = R.string.good_air_status_txt, statusIndicatorRes = R.drawable.good_status_indicator),
-    MODERATE(colorRes = R.color.yellow, drawableRes = R.drawable.moderate_location_marker, strRes = R.string.moderate_air_status_txt, statusIndicatorRes = R.drawable.moderate_status_indicator)
+    DANGER(colorRes = R.color.transparent_orange, drawableRes = R.drawable.danger_location_marker, strRes = R.string.danger_txt, statusIndicatorRes = R.drawable.danger_status_indicator),
+    SAFE(colorRes = R.color.transparent_green, drawableRes = R.drawable.safe_location_marker, strRes = R.string.good_air_status_txt, statusIndicatorRes = R.drawable.good_status_indicator),
+    MODERATE(colorRes = R.color.transparent_yellow, drawableRes = R.drawable.moderate_location_marker, strRes = R.string.moderate_air_status_txt, statusIndicatorRes = R.drawable.moderate_status_indicator)
 }

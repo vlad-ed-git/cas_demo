@@ -53,7 +53,7 @@ class MapFragment : Fragment(), MapActionsAdapter.ClickListener {
 
 
     private val CIRCLE_RADIUS = 500.toDouble()
-    private val STROKE_WIDTH = 15f
+    private val STROKE_WIDTH = 5f
 
     private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
 
