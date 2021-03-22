@@ -1,16 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
-<com.google.android.material.card.MaterialCardView
+    <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+        android:background="@drawable/round_green_bg"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:cardBackgroundColor="@color/green"
-    app:cardElevation="@dimen/md_space"
-    android:clipToPadding="false">
-
-<androidx.constraintlayout.widget.ConstraintLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:clipToPadding="false"
     android:padding="@dimen/md_space">
 
     <TextView
@@ -201,6 +196,4 @@
         android:layout_marginTop="@dimen/std_space"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-
-</com.google.android.material.card.MaterialCardView>
 </layout>

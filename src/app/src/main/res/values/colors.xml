@@ -8,6 +8,11 @@
     <color name="green">#319442</color>
     <color name="yellow">#cbb71a</color>
     <color name="orange">#e3945c</color>
+
+    <color name="transparent_green">#33319442</color>
+    <color name="transparent_yellow">#66cbb71a</color>
+    <color name="transparent_orange">#55e3945c</color>
+
     <color name="white">#ffffff</color>
     <color name="whitish">#f3f3f3</color>
 </resources>
